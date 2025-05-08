@@ -1,20 +1,20 @@
 import pandas as pd
 import glob
 
-# Get list of CSV files in the "temperatures" folder
+# import list of CSV files 
 csv_files = glob.glob('temperature_data/*.csv')
 
-# Read and concatenate all CSV files into a single DataFrame
+# Read and merge all CSV files into a single DataFrame
 dfs = [pd.read_csv(file) for file in csv_files]
 all_data = pd.concat(dfs, ignore_index=True)
 
-# Melt the DataFrame to transform monthly columns into rows
+#  Transform monthly columns into rows
 melted = pd.melt(all_data, id_vars=['STN_ID'], 
                  value_vars=['January', 'February', 'March', 'April', 'May', 'June', 
                              'July', 'August', 'September', 'October', 'November', 'December'], 
                  var_name='month', value_name='temperature')
 
-# Define month-to-season mapping for Australia
+# Define month-to-season mapping 
 month_to_season = {
     'January': 'Summer', 'February': 'Summer', 'December': 'Summer',
     'March': 'Autumn', 'April': 'Autumn', 'May': 'Autumn',
@@ -40,7 +40,7 @@ station_ranges['range'] = station_ranges['max'] - station_ranges['min']
 max_range = station_ranges['range'].max()
 largest_range_stations = station_ranges[station_ranges['range'] == max_range].index.tolist()
 
-# Save station(s) with the largest temperature range to "largest_temp_range_station.txt"
+#  station(s) with the largest temperature range to "largest_temp_range_station.txt"
 with open('largest_temp_range_station.txt', 'w') as f:
     for station in largest_range_stations:
         f.write(f"{station}\n")
@@ -52,7 +52,7 @@ coolest_avg = station_averages.min()
 warmest_stations = station_averages[station_averages == warmest_avg].index.tolist()
 coolest_stations = station_averages[station_averages == coolest_avg].index.tolist()
 
-# Save warmest and coolest stations to "warmest_and_coolest_station.txt"
+#  warmest and coolest stations to "warmest_and_coolest_station.txt"
 with open('warmest_and_coolest_station.txt', 'w') as f:
     f.write("Warmest stations:\n")
     for station in warmest_stations:
